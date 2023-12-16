@@ -11,6 +11,8 @@
     },
     "rules": {
         "no-console": "off",
-        "no-underscore-dangle": 'off'
+        "linebreak-style": 0,
+        "no-underscore-dangle": "off",
+        "indent": ["error", 2, 4]
     }
 }
