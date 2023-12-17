@@ -1,2 +1,5 @@
 node_modules
 notes.txt
+notes-api-web-server.pem
+.env
+.prod.env 
