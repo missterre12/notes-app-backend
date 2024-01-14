@@ -1,5 +1,3 @@
-const ClientError = require('../../exceptions/ClientError');
-
 class NotesHandler {
   constructor(service, validator) {
     this._service = service;
@@ -10,6 +8,7 @@ class NotesHandler {
     this.getNoteByIdHandler = this.getNoteByIdHandler.bind(this);
     this.putNoteByIdHandler = this.putNoteByIdHandler.bind(this);
     this.deleteNoteByIdHandler = this.deleteNoteByIdHandler.bind(this);
+    this.getUsersByUsernameHandler = this.getUsersByUsernameHandler.bind(this);
   }
 
   async postNoteHandler(request, h) {
@@ -18,8 +17,8 @@ class NotesHandler {
     const { id: credentialId } = request.auth.credentials;
 
     const noteId = await this._service.addNote({
-        title, body, tags, owner: credentialId,
-      });
+      title, body, tags, owner: credentialId,
+    });
 
     const response = h.response({
       status: 'success',
@@ -43,7 +42,7 @@ class NotesHandler {
     };
   }
 
- async getNoteByIdHandler(request, h) {
+  async getNoteByIdHandler(request, h) {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
@@ -62,7 +61,6 @@ class NotesHandler {
     const { id } = request.params; const { id: credentialId } = request.auth.credentials;
 
     await this._service.verifyNoteAccess(id, credentialId);
-    await this._service.verifyNoteOwner(id, credentialId);
     this._service.editNoteById(id, request.payload);
 
     return {
@@ -81,6 +79,17 @@ class NotesHandler {
     return {
       status: 'success',
       message: 'Catatan berhasil dihapus',
+    };
+  }
+
+  async getUsersByUsernameHandler(request, h) {
+    const { username = '' } = request.query;
+    const users = await this._service.getUsersByUsername(username);
+    return {
+      status: 'success',
+      data: {
+        users,
+      },
     };
   }
 }

@@ -15,3 +15,5 @@ const mapDBToModel = ({
   updatedAt: updated_at,
   username,
 });
+
+module.exports = { mapDBToModel };
